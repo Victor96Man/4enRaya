@@ -11,6 +11,7 @@ import android.widget.ImageView;
 
 public class MainActivity extends AppCompatActivity {
     private Game juego;
+    private boolean reproMusica = true;
 
     private int[][] arrayId = {{R.id.boton00, R.id.boton01, R.id.boton02, R.id.boton03, R.id.boton04, R.id.boton05, R.id.boton06},
             {R.id.boton10, R.id.boton11, R.id.boton12, R.id.boton13, R.id.boton14, R.id.boton15, R.id.boton16},
@@ -42,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 } else if (juego.estado == "finished") {
                     mensajeGanador();
+
                 }
             }
         }
@@ -78,7 +80,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void mensajeGanador() {
-
+        Musica.stop(this);
+        reproMusica = false;
         AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.AppTheme));
         if (juego.ganador == "player") {
             builder.setMessage("¡¡Has ganado!!");
@@ -106,5 +109,21 @@ public class MainActivity extends AppCompatActivity {
 
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Musica.play(this, R.raw.musica);
+
+        if(!reproMusica) {
+            Musica.stop(this);
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Musica.stop(this);
     }
 }
